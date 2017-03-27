@@ -20,6 +20,11 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func stepToNextGridIteration(_ sender: Any) {
+        gridView.grid = gridView.grid.next()
+        gridView.setNeedsDisplay()
+    }
 
+    @IBOutlet weak var gridView: GridView!
 }
 
