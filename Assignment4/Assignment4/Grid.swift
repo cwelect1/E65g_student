@@ -19,6 +19,7 @@ public enum CellState {
 
 public protocol GridProtocol {
     init(_ rows: Int, _ cols: Int, cellInitializer: (GridPosition) -> CellState)
+    //init(_ rows: Int, _ cols: Int)
     var description: String { get }
     var size: GridSize { get }
     subscript (row: Int, col: Int) -> CellState { get set }

@@ -33,7 +33,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4a4-9C-Dv1" customClass="GridView" customModule="Assignment3" customModuleProvider="target">
-                                <rect key="frame" x="16" y="163" width="343" height="340"/>
+                                <rect key="frame" x="16" y="163" width="343" height="341"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="size">
