@@ -1,6 +1,8 @@
 //
 //  Grid.swift
 //
+import Foundation
+
 public typealias GridPosition = (row: Int, col: Int)
 public typealias GridSize = (rows: Int, cols: Int)
 
@@ -19,7 +21,6 @@ public enum CellState {
 
 public protocol GridProtocol {
     init(_ rows: Int, _ cols: Int, cellInitializer: (GridPosition) -> CellState)
-    //init(_ rows: Int, _ cols: Int)
     var description: String { get }
     var size: GridSize { get }
     subscript (row: Int, col: Int) -> CellState { get set }
@@ -66,6 +67,40 @@ extension GridProtocol {
         var nextGrid = Self(size.rows, size.cols) { _, _ in .empty }
         lazyPositions(self.size).forEach { nextGrid[$0.row, $0.col] = self.nextState(of: $0) }
         return nextGrid
+    }
+    
+    public func getCounts() -> [String:String] {
+        
+        var empty = 0, born = 0, died = 0, alive = 0
+
+        // I wrote this before I understood the Lazy Positions code Van mentioned.
+        // Chose to leave it for this since the # of lines would be similar.
+        (0 ..< size.rows).forEach { i in
+            (0 ..< size.cols).forEach { j in
+                //let grid = gridDataSource!
+                if self[(i, j)] == .alive{
+                    alive += 1
+                }
+                else if self[(i, j)] == .born{
+                    born += 1
+                }
+                else if self[(i, j)] == .died{
+                    died += 1
+                }
+                else if self[(i, j)] == .empty{
+                    empty += 1
+                }
+            }
+        }
+        
+        var dictCount:[String:String] = [:]
+        
+        dictCount["born"] = String(born)
+        dictCount["alive"] = String(alive)
+        dictCount["died"] = String(died)
+        dictCount["empty"] = String(empty)
+        
+        return dictCount
     }
 }
 
@@ -140,5 +175,95 @@ public extension Grid {
         case (0, 1), (1, 2), (2, 0), (2, 1), (2, 2): return .alive
         default: return .empty
         }
+    }
+}
+
+public protocol EngineDelegate{
+
+    func engineDidUpdate(withGrid: GridProtocol)
+}
+
+public protocol EngineProtocol {
+    var delegate: EngineDelegate? { get set }
+    var grid: GridProtocol { get }
+    var refreshRate: Double { get set }
+    var refreshTimer: Timer? {get set}
+    var rows: Int {get set}
+    var cols: Int {get set}
+    func step() -> GridProtocol
+}
+
+public class StandardEngine : EngineProtocol {
+    static var engine: StandardEngine = StandardEngine(rows: 10, cols: 10)
+    
+    public var delegate: EngineDelegate?
+    public var grid: GridProtocol
+    public var refreshTimer: Timer?
+    public var refreshRate: Double {
+        didSet{
+            if refreshRate > 0.0 {
+                if #available(iOS 10.0, *) {
+                    refreshTimer = Timer.scheduledTimer(
+                        withTimeInterval: refreshRate,
+                        repeats: true
+                    ) { (t: Timer) in
+                        _ = self.step()
+                    }
+                } else {
+                    // Fallback on earlier versions
+                }
+            }
+            else {
+                refreshTimer?.invalidate()
+                refreshTimer = nil
+            }
+        }
+    }
+    public var rows: Int {
+        didSet {
+            self.grid = Grid(rows, rows)
+            _ = self.new()
+        }
+    }
+    public var cols: Int {
+        didSet {
+            self.grid = Grid(cols, cols)
+            _ = self.new()
+        }
+    }
+    
+    init(rows: Int, cols: Int) {
+        self.refreshRate = 0.0
+        self.cols = cols
+        self.rows = rows
+        self.grid = Grid(rows, cols) //{_,_ in .empty}
+    }
+    
+    public func step() -> GridProtocol {
+        let newGrid = grid.next()
+        grid = newGrid
+        delegate?.engineDidUpdate(withGrid: grid)
+        let nc = NotificationCenter.default
+        let name = Notification.Name(rawValue: "EngineUpdate")
+        let n = Notification(name: name,
+                             object: nil,
+                             userInfo: ["engine" : self.grid])
+        nc.post(n)
+        
+        return grid
+    }
+    
+    public func new() -> GridProtocol {
+        //let newGrid = grid.next()
+        //grid = newGrid
+        delegate?.engineDidUpdate(withGrid: grid)
+        let nc = NotificationCenter.default
+        let name = Notification.Name(rawValue: "EngineUpdate")
+        let n = Notification(name: name,
+                             object: nil,
+                             userInfo: ["engine" : self.grid])
+        nc.post(n)
+        
+        return grid
     }
 }

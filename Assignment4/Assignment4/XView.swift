@@ -2,7 +2,7 @@
 //  XView.swift
 //  Assignment4
 //
-//  Mostyl copied by Weinberg, Corbett on 4/17/17.
+//  Mostly copied by Weinberg, Corbett on 4/17/17.
 //  Copyright © 2017 Harvard Division of Continuing Education. All rights reserved.
 //
 
@@ -14,9 +14,14 @@ public protocol GridViewDataSource {
 
 @IBDesignable class XView: UIView {
     
+    @IBInspectable var livingColor: UIColor = UIColor.green
+    @IBInspectable var emptyColor: UIColor   = UIColor.clear
+    @IBInspectable var bornColor: UIColor   = UIColor.orange
+    @IBInspectable var diedColor: UIColor   = UIColor.red
+    
     @IBInspectable var fillColor = UIColor.darkGray
     @IBInspectable var gridSize: Int = 3
-    // Updated since class
+    
     var gridDataSource: GridViewDataSource?
     
     var xColor = UIColor.black
@@ -47,16 +52,28 @@ public protocol GridViewDataSource {
                     height: size.height - 4.0
                 )
                 let ovalRect = CGRect( origin: ovalOrigin, size: ovalSize )
-                if let grid = gridDataSource, grid[i,j].isAlive {
-                    drawOval(ovalRect)
+                let grid = gridDataSource!
+                if grid[(i, j)] == .alive{
+                    livingColor.setFill()
                 }
+                else if grid[(i, j)] == .born{
+                    bornColor.setFill()
+                }
+                else if grid[(i, j)] == .died{
+                    diedColor.setFill()
+                }
+                else if grid[(i, j)] == .empty{
+                    emptyColor.setFill()
+                }
+                
+                drawOval(ovalRect)
             }
         }
     }
     
     func drawOval(_ ovalRect: CGRect) {
         let path = UIBezierPath(ovalIn: ovalRect)
-        fillColor.setFill()
+        //fillColor.setFill()
         path.fill()
     }
     
@@ -89,7 +106,7 @@ public protocol GridViewDataSource {
         path.addLine(to: end)
         
         //draw the stroke
-        UIColor.cyan.setStroke()
+        UIColor.black.setStroke()
         path.stroke()
     }
     
