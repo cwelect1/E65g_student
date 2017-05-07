@@ -52,20 +52,22 @@ public protocol GridViewDataSource {
                     height: size.height - 4.0
                 )
                 let ovalRect = CGRect( origin: ovalOrigin, size: ovalSize )
-                let grid = gridDataSource!
-                if grid[(i, j)] == .alive{
-                    livingColor.setFill()
+                //let grid = gridDataSource!
+                if let grid = gridDataSource {
+                    
+                    if grid[(i, j)] == .alive{
+                        livingColor.setFill()
+                    }
+                    else if grid[(i, j)] == .born{
+                        bornColor.setFill()
+                    }
+                    else if grid[(i, j)] == .died{
+                        diedColor.setFill()
+                    }
+                    else if grid[(i, j)] == .empty{
+                        emptyColor.setFill()
+                    }
                 }
-                else if grid[(i, j)] == .born{
-                    bornColor.setFill()
-                }
-                else if grid[(i, j)] == .died{
-                    diedColor.setFill()
-                }
-                else if grid[(i, j)] == .empty{
-                    emptyColor.setFill()
-                }
-                
                 drawOval(ovalRect)
             }
         }

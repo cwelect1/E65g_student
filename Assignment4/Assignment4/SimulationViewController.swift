@@ -1,29 +1,24 @@
 //
-//  SimulationViewController.swift
+//  SimulationView2Controller.swift
 //  Assignment4
 //
-//  Created by Van Simmons on 1/15/17.
-//  Modified by Corbett Weinberg 4/17/17.
+//  Created by Weinberg, Corbett on 5/4/17.
 //  Copyright © 2017 Harvard Division of Continuing Education. All rights reserved.
 //
+
 
 import UIKit
 
 class SimulationViewController: UIViewController , GridViewDataSource, EngineDelegate{
-
+    
     @IBOutlet weak var gridView: XView!
-    //@IBOutlet weak var sizeStepper: UIStepper!
-    @IBAction func resetButton(_ sender: UIButton) {
-        
-    }
     
     var engine: StandardEngine!
     var timer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let size = gridView.gridSize
-        engine = StandardEngine(rows: size, cols: size)
+        engine = StandardEngine.engine
         engine.delegate = self
         gridView.gridDataSource = self
         
@@ -34,7 +29,6 @@ class SimulationViewController: UIViewController , GridViewDataSource, EngineDel
             object: nil,
             queue: nil) { (n) in
                 self.gridView.gridSize = self.engine.grid.size.rows
-                //self.gridView.gridSize = StandardEngine.engine.grid.size.rows
                 self.gridView.gridDataSource = self
                 self.gridView.setNeedsDisplay()
         }
@@ -53,18 +47,8 @@ class SimulationViewController: UIViewController , GridViewDataSource, EngineDel
         super.didReceiveMemoryWarning()
     }
     
-    @IBAction func stepNext(_ sender: Any) {
-        //let rows = StandardEngine.engine.rows
-        //engine.grid = Grid(Int(rows), Int(rows))
+    @IBAction func step(_ sender: UIButton) {
         engine.grid = engine.step()
         gridView.setNeedsDisplay()
     }
- 
-    //MARK: Stepper Event Handling
-    @IBAction func step(_ sender: UIStepper) {
-        engine.grid = Grid(Int(sender.value), Int(sender.value))
-        gridView.gridSize = Int(sender.value)
-        gridView.setNeedsDisplay()
-    }
 }
-

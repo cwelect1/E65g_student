@@ -203,6 +203,7 @@ public class StandardEngine : EngineProtocol {
         didSet{
             if refreshRate > 0.0 {
                 if #available(iOS 10.0, *) {
+                    print("refreshRate (greater than 0.0: \(refreshRate)")
                     refreshTimer = Timer.scheduledTimer(
                         withTimeInterval: refreshRate,
                         repeats: true
@@ -214,6 +215,7 @@ public class StandardEngine : EngineProtocol {
                 }
             }
             else {
+                print("refreshRate (should be  0.0: \(refreshRate)")
                 refreshTimer?.invalidate()
                 refreshTimer = nil
             }

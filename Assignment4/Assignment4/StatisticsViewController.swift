@@ -25,7 +25,6 @@ class StatisticsViewController: UIViewController {
             queue: nil) {(n) in
                 let engObj = n.userInfo?["engine"] as? Grid
                 let counts:[String:String] = (engObj?.getCounts())!
-                //let counts:[String:String] = StandardEngine.engine.grid.getCounts()
                 self.emptyLabel.text = counts["empty"]
                 self.bornLabel.text = counts["born"]
                 self.aliveLabel.text = counts["alive"]
@@ -38,7 +37,5 @@ class StatisticsViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
 }
 
