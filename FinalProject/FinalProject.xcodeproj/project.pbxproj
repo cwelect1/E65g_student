@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		89B15F891EBF5CD4006AE593 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B15F841EBF5CD4006AE593 /* Grid.swift */; };
-		89B15F8A1EBF5CD4006AE593 /* InstrumentationViewControllerOrig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B15F851EBF5CD4006AE593 /* InstrumentationViewControllerOrig.swift */; };
 		89B15F8B1EBF5CD4006AE593 /* SimulationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B15F861EBF5CD4006AE593 /* SimulationViewController.swift */; };
 		89B15F8C1EBF5CD4006AE593 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B15F871EBF5CD4006AE593 /* StatisticsViewController.swift */; };
 		89B15F8D1EBF5CD4006AE593 /* XView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B15F881EBF5CD4006AE593 /* XView.swift */; };
@@ -23,7 +22,6 @@
 
 /* Begin PBXFileReference section */
 		89B15F841EBF5CD4006AE593 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
-		89B15F851EBF5CD4006AE593 /* InstrumentationViewControllerOrig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstrumentationViewControllerOrig.swift; sourceTree = "<group>"; };
 		89B15F861EBF5CD4006AE593 /* SimulationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimulationViewController.swift; sourceTree = "<group>"; };
 		89B15F871EBF5CD4006AE593 /* StatisticsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		89B15F881EBF5CD4006AE593 /* XView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XView.swift; sourceTree = "<group>"; };
@@ -54,7 +52,6 @@
 			children = (
 				89B15F911EC0B1AF006AE593 /* Fetcher.swift */,
 				89B15F841EBF5CD4006AE593 /* Grid.swift */,
-				89B15F851EBF5CD4006AE593 /* InstrumentationViewControllerOrig.swift */,
 				89B15F931EC1147C006AE593 /* InstrumentationViewController.swift */,
 				89B15F861EBF5CD4006AE593 /* SimulationViewController.swift */,
 				89B15F871EBF5CD4006AE593 /* StatisticsViewController.swift */,
@@ -161,7 +158,6 @@
 				89B15F961EC11AD6006AE593 /* GridEditorViewController.swift in Sources */,
 				89B15F921EC0B1AF006AE593 /* Fetcher.swift in Sources */,
 				89B15F941EC1147C006AE593 /* InstrumentationViewController.swift in Sources */,
-				89B15F8A1EBF5CD4006AE593 /* InstrumentationViewControllerOrig.swift in Sources */,
 				89B15F8C1EBF5CD4006AE593 /* StatisticsViewController.swift in Sources */,
 				89B15F8B1EBF5CD4006AE593 /* SimulationViewController.swift in Sources */,
 				89B15F8D1EBF5CD4006AE593 /* XView.swift in Sources */,

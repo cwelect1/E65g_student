@@ -55,16 +55,16 @@ public protocol GridViewDataSource {
                 //let grid = gridDataSource!
                 if let grid = gridDataSource {
                     
-                    if grid[(i, j)] == .alive{
+                    if grid[i, j] == .alive{
                         livingColor.setFill()
                     }
-                    else if grid[(i, j)] == .born{
+                    else if grid[i, j] == .born{
                         bornColor.setFill()
                     }
-                    else if grid[(i, j)] == .died{
+                    else if grid[i, j] == .died{
                         diedColor.setFill()
                     }
-                    else if grid[(i, j)] == .empty{
+                    else if grid[i, j] == .empty{
                         emptyColor.setFill()
                     }
                 }

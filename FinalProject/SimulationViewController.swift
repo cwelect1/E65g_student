@@ -9,7 +9,7 @@
 
 import UIKit
 
-class SimulationViewController: UIViewController , GridViewDataSource, EngineDelegate{
+class SimulationViewController: UIViewController, GridViewDataSource, EngineDelegate{
     
     @IBOutlet weak var gridView: XView!
     

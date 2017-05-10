@@ -280,6 +280,9 @@
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="gridView" destination="bsc-oS-8kA" id="7Jy-bC-okb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2OH-4e-UCh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

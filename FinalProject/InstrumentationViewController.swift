@@ -27,95 +27,30 @@
 
 import UIKit
 import Foundation
-var sectionHeaders = [
-    "One", "Two", "Three", "Four", "Five", "Six"
-]
-
-var data = [
-    [
-        "Apple",
-        "Banana",
-        "Cherry",
-        "Date",
-        "Kiwi",
-        "Apple",
-        "Banana",
-        "Cherry",
-        "Date"
-    ],
-    [
-        "Kiwi",
-        "Apple",
-        "Banana",
-        "Cherry",
-        "Date",
-        "Kiwi",
-        "Apple",
-        "Banana",
-        "Cherry",
-        "Date",
-        "Kiwi",
-        "Apple",
-        "Banana"
-    ],
-    [
-        "Cherry",
-        "Date",
-        "Kiwi",
-        "Apple",
-        "Banana",
-        "Cherry",
-        "Date",
-        "Kiwi",
-        "Apple",
-        "Banana",
-        "Cherry",
-        "Date",
-        "Kiwi",
-        "Apple",
-        "Banana",
-        "Cherry",
-        "Date",
-        "Kiwi",
-        "Apple",
-        "Banana",
-        "Cherry"
-    ],
-    [
-        "Date",
-        "Kiwi",
-        "Apple",
-        "Banana",
-        "Cherry",
-        "Date",
-        "Kiwi",
-        "Apple",
-        "Banana",
-        "Cherry",
-        "Date",
-        "Kiwi",
-        "Apple",
-        "Banana",
-        "Cherry",
-        "Date",
-        "Kiwi",
-        "Blueberry"
-    ]
-]
 
 class InstrumentationViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    var data: NSArray = []
     let finalProjectURL = "https://dl.dropboxusercontent.com/u/7544475/S65g.json"
     var refreshRate: Double = 5.0
-    var jsonArray : NSArray = []
+    
     @IBOutlet weak var refreshLabel: UILabel!
     @IBOutlet weak var rowsTextBox: UITextField!
     @IBOutlet weak var colsTextBox: UITextField!
     @IBOutlet weak var tableView: UITableView!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
-        self.fetchshit()
+        // Load the sample data.
+        fetchIt()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
     }
     
     @IBAction func rowsStepper(_ sender: UIStepper) {
@@ -137,13 +72,6 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     @IBOutlet weak var lblRate: UILabel!
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
     
     @IBAction func refreshOnOff(_ sender: UISwitch) {
         if sender.isOn {
@@ -164,18 +92,22 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
                 print("no json")
                 return
             }
-            print(json)
-            self.jsonArray = json as! NSArray
-            let jsonDictionary = self.jsonArray[0] as! NSDictionary
-            let jsonTitle = jsonDictionary["title"] as! String
-            let jsonContents = jsonDictionary["contents"] as! [[Int]]
-            print (jsonTitle, jsonContents)
+            self.data = (json as? NSArray)!
+            print("json: \(json)")
+            print("self.data: \(self.data)")
+            //print(json)
+            //let data = json as! NSArray
+            //let jsonDictionary = self.jsonArray[0] as! NSDictionary
+            //let jsonTitle = jsonDictionary["title"] as! String
+            //let jsonContents = jsonDictionary["contents"] as! [[Int]]
+            //print (jsonTitle, jsonContents)
             OperationQueue.main.addOperation {
-                //self.textView.text = resultString
+                self.tableView.reloadData()
             }
         }
     }
-    func fetchshit() {
+    
+    func fetchIt() {
         let fetcher = Fetcher()
         fetcher.fetchJSON(url: URL(string:finalProjectURL)!) { (json: Any?, message: String?) in
             guard message == nil else {
@@ -186,37 +118,59 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
                 print("no json")
                 return
             }
-            print(json)
-            self.jsonArray = json as! NSArray
-            let jsonDictionary = self.jsonArray[0] as! NSDictionary
-            let jsonTitle = jsonDictionary["title"] as! String
-            let jsonContents = jsonDictionary["contents"] as! [[Int]]
-            print (jsonTitle, jsonContents)
+            self.data = (json as? NSArray)!
+            print("Corbett's JSON")
             OperationQueue.main.addOperation {
-                //self.textView.text = resultString
+                self.tableView.reloadData()
             }
         }
     }
- 
+    
+    //MARK: - Table view data source
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        //print("self.data.count = \(self.data.count)")
+        return (self.data.count)
+    }
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        // Table view cells are reused and should be dequeued using a cell identifier.
+        let cellIdentifier = "basic"
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        let label = cell.contentView.subviews.first as! UILabel
+        let jsonDictionary = self.data[indexPath.row] as! NSDictionary
+        let jsonTitle = jsonDictionary["title"] as! String
+        label.text = jsonTitle
+        
+        return cell
+    }
+
     /*
     func numberOfSections(in tableView: UITableView) -> Int {
         return data.count
     }
- */
+ 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //return data[section].count
-        return (jsonArray[section] as AnyObject).count
+        print("tableView section.count \(data[section].count)")
+        return jsonArray[section].count
     }
-    /*
+    
     internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = "basic"
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         let label = cell.contentView.subviews.first as! UILabel
         label.text = data[indexPath.section][indexPath.item]
-        
+     
         return cell
     }
-    */
+ 
     
     internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = "basic"
@@ -226,25 +180,26 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         let jsonDictionary = jsonArray[indexPath.section] as! NSDictionary
         let jsonTitle = jsonDictionary["title"] as! String
         label.text = jsonTitle
-        
+        print("tableView identifier: \(indexPath.section)")
         return cell
     }
-    /*
+    
     internal func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sectionHeaders[section]
     }
- */
+ 
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            var newData = data[0]
+            var newData = data[1]
             newData.remove(at: indexPath.row)
             data[indexPath.row] = newData
             tableView.deleteRows(at: [indexPath], with: .automatic)
+            print("tableView Add data")
             tableView.reloadData()
         }
     }
-    
+ 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let indexPath = tableView.indexPathForSelectedRow
         if let indexPath = indexPath {
@@ -257,5 +212,5 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
                 }
             }
         }
-    }
+    }*/
 }
