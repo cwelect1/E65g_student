@@ -10,18 +10,20 @@
 //
 /*
  Notes for me and you...
- A few things I'd love feedback on if you'd be so kind, even though some of it is kind of explained in discussion.
- - My grid doesn't change size if I change the row/col size on the instrumentation panel before 1st visiting Simulation.
- - How do I fix that?
- - How do I vary between Landscape and portrait for (wR hR)? I tried keeping my gridView at .9 x height or width (neither worked)
- - Mentioned in discussion - Statistics don't update until I hit the Sim tab first.
- - If I update refreshRate wile refresh is on (by sliding the slider), it goes whack y and refreshes too fast.
- - I'm getting a Build time error (IB Designables - Failed to render and update auto layout status for SimulationView...
+ Could you provide feedback on these:
+ 1. - My grid doesn't change size if I change the row/col size on the instrumentation panel before 1st visiting Simulation.
+ 2. - How do I vary between Landscape and portrait for (wR hR)? I tried keeping my gridView at .9 x height or width. By doind so, in landscape, the grid is bigger than height.
+ 3. - Mentioned in discussion - Statistics don't update until I hit the Sim tab first.
+ 4. - If I update refreshRate wile refresh is on (by sliding the slider), it goes whacky and refreshes too fast.
+ 5. - When the grid cells stop moving, but just sit there and alternate between born and dead (or other states), the stats don't update. Why?
+ 6. - How do I get the json data once and not everytime the Instrumentation view loads?
+ 
+ 7. - I'm was getting a Build time error (IB Designables - Failed to render and update auto layout status for SimulationView...
  In the crash file it indicates...
  "fatal error: unexpectedly found nil while unwrapping an Optional value
  1   edu.harvard.Assignment4       	0x00000002169a744f _TFFFC11Assignment45XView9drawOvalsFVSC6CGRectT_U_FSiT_U_FSiT_ + 303 (XView.swift:55)
  "
- Figured this sucker out... I had "gridDataSource" set to force unwrap instead of checking if it was nil. My storyboard wouldn't appear because of this (or it appeared, but Simulator was blank).
+ Figured this sucker out... I had "gridDataSource" set to force unwrap instead of checking if it was nil. My storyboard wouldn't appear because of this (well...it appeared, but was blank).
  
  */
 
@@ -38,7 +40,8 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
     @IBOutlet weak var rowsTextBox: UITextField!
     @IBOutlet weak var colsTextBox: UITextField!
     @IBOutlet weak var tableView: UITableView!
-    
+    @IBOutlet weak var lblRate: UILabel!
+       
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -70,8 +73,6 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         refreshLabel.text = "(\(roundedValue) sec)"
         refreshRate = roundedValue
     }
-    
-    @IBOutlet weak var lblRate: UILabel!
     
     @IBAction func refreshOnOff(_ sender: UISwitch) {
         if sender.isOn {
@@ -119,7 +120,6 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
                 return
             }
             self.data = (json as? NSArray)!
-            print("Corbett's JSON")
             OperationQueue.main.addOperation {
                 self.tableView.reloadData()
             }
@@ -150,7 +150,39 @@ class InstrumentationViewController: UIViewController, UITableViewDelegate, UITa
         
         return cell
     }
-
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let indexPath = tableView.indexPathForSelectedRow
+        if let indexPath = indexPath {
+            let size = getMaxGridSize(row: indexPath.row)
+            let jsonDictionary = self.data[indexPath.row] as! NSDictionary
+            let pos = jsonDictionary["contents"] as! [[Int]]
+            if let vc = segue.destination as? GridEditorViewController {
+                vc.gridSize = size
+                vc.pos = pos
+                vc.saveClosure = { newValue in
+                    //data[indexPath.section][indexPath.row] = newValue
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    func getMaxGridSize(row: Int) -> Int {
+        var maxVal = 0
+        
+        let jsonDictionary = self.data[row] as! NSDictionary
+        let pos = jsonDictionary["contents"] as! [[Int]]
+        // Refactor into reduce
+        for row in pos {
+            for col in row{
+                if col > maxVal{
+                    maxVal = col
+                }
+            }
+        }
+        return maxVal
+    }
     /*
     func numberOfSections(in tableView: UITableView) -> Int {
         return data.count

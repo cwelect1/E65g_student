@@ -39,6 +39,7 @@ class Fetcher: NSObject, URLSessionDelegate {
     }
     
     typealias JSONCompletionHandler = (_ json: Any?, _ message: String?) -> Void
+    
     func fetchJSON(url: URL, completion: @escaping JSONCompletionHandler) {
         fetch(url: url) { (result: EitherOr) in
             switch result {
@@ -55,6 +56,7 @@ class Fetcher: NSObject, URLSessionDelegate {
     }
     
     typealias FetchCompletionHandler = (_ result: EitherOr) -> Void
+    
     func fetch(url: URL, completion: @escaping FetchCompletionHandler) {
         let task = session().dataTask(with: url) {
             (data: Data?, response: URLResponse?, netError: Error?) in

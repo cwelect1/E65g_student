@@ -208,7 +208,9 @@
                             <constraint firstItem="1Q0-k6-fux" firstAttribute="centerX" secondItem="MP7-Ek-Vy5" secondAttribute="centerX" id="zkS-rk-bAk"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="yD5-tj-hFM"/>
+                    <navigationItem key="navigationItem" id="yD5-tj-hFM">
+                        <barButtonItem key="backBarButtonItem" title="Cancel" id="Vw7-4i-URr"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="colsTextBox" destination="8kD-dC-1si" id="VGH-4q-ZAR"/>
                         <outlet property="refreshLabel" destination="R5F-CJ-tOi" id="Ixr-0e-hK8"/>

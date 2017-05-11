@@ -69,6 +69,22 @@ extension GridProtocol {
         return nextGrid
     }
     
+    public func setConfig(_ configPos: [[Int]]) -> Self {
+        var nextGrid = Self(size.rows, size.cols) { _, _ in .empty }
+        lazyPositions(self.size).forEach { nextGrid[$0.row, $0.col] = configState(row: $0.row, col: $0.col,configPos) }
+        return nextGrid
+    }
+    
+    public func configState(row: Int, col: Int, _ configPos: [[Int]]) -> CellState{
+        var returnValue: CellState = .empty
+        for configRow in configPos {
+            if configRow[0] == row && configRow[1] == col{
+                returnValue = .alive
+            }
+        }
+        return returnValue
+    }
+    
     public func getCounts() -> [String:String] {
         
         var empty = 0, born = 0, died = 0, alive = 0

@@ -10,35 +10,21 @@ import UIKit
 
 class GridEditorViewController: UIViewController, GridViewDataSource {
     
-    //var engine: StandardEngine!
     var grid: Grid!
+    var gridSize: Int = 0
+    var pos:[[Int]] = []
     var timer: Timer?
     @IBOutlet weak var gridView: XView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = false
-        grid = Grid(5, 5)
-        _ = Grid.gliderInitializer(pos: (0,1))
-        //engine = StandardEngine(rows: 5, cols: 5)
-        //engine.cols = 5
-        //engine.rows = 5
-        //engine.grid = Grid(engine.rows, engine.cols)
-        //engine.delegate = self
-        //gridView.gridDataSource = self
-        
-        /*let nc = NotificationCenter.default
-        let name = Notification.Name(rawValue: "EngineUpdate")
-        nc.addObserver(
-            forName: name,
-            object: nil,
-            queue: nil) { (n) in
-                self.gridView.gridSize = self.engine.grid.size.rows
-                self.gridView.gridDataSource = self
-                self.gridView.setNeedsDisplay()
-        }*/
+        grid = Grid(gridSize, gridSize)
         
         self.gridView.gridSize = self.grid.size.rows
+        let newGrid = grid.setConfig(pos)
+        grid = newGrid
+        
         self.gridView.gridDataSource = self
         self.gridView.setNeedsDisplay()
     }
